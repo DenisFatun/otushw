@@ -1,0 +1,55 @@
+version: '3.9'
+
+networks:
+   somenetweork:
+    driver: bridge
+
+services:
+ homeworkotus:
+  image: ${DOCKER_REGISTRY-}homeworkotus
+  container_name: otuswebapicont
+  build:
+   context: .
+   dockerfile: /HomeWorkOTUS/Dockerfile
+  ports:
+   - '55555:8081'
+  networks:
+   - somenetweork
+  depends_on:
+   - postgres_db
+
+ postgres_db:
+  image: postgres:latest
+  container_name: pgmaster
+  environment:
+   - POSTGRES_DB=otusdb
+   - POSTGRES_USER=postgres
+   - POSTGRES_PASSWORD=pass
+  ports:
+   - '5432:5432'
+  networks:
+   - somenetweork
+
+ postgres_slave1:
+  image: postgres:latest
+  container_name: pgslave1
+  environment:
+   - POSTGRES_DB=otusdb
+   - POSTGRES_USER=postgres
+   - POSTGRES_PASSWORD=pass
+  ports:
+   - '15432:5432'
+  networks:
+   - somenetweork
+
+ postgres_slave2:
+  image: postgres:latest
+  container_name: pgslave2
+  environment:
+   - POSTGRES_DB=otusdb
+   - POSTGRES_USER=postgres
+   - POSTGRES_PASSWORD=pass
+  ports:
+   - '25432:5432'
+  networks:
+   - somenetweork

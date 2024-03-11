@@ -1,0 +1,53 @@
+https://github.com/Fatun85/otushw.git - ссылка на репо в гитхабе (ветка main, она одна)
+
+запускаем из корня проекта 
+docker-compose up -d
+открываем свагер https://localhost:55555/swagger/index.html
+Примеры запросов:
+
+1.
+curl -X 'POST' \
+  'https://localhost:55555/user/register' \
+  -H 'accept: text/plain' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Иван",
+  "serName": "Иванов",
+  "age": 25,
+  "isMale": true,
+  "interests": "Спорт",
+  "city": "Москва",
+  "password": "123456"
+}'
+
+"fc8a0f79-3654-4c4c-b669-96edcd8a8e48"
+
+2.
+curl -X 'POST' \
+  'https://localhost:55555/user/login' \
+  -H 'accept: text/plain' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "clientId": "fc8a0f79-3654-4c4c-b669-96edcd8a8e48",
+  "password": "123456"
+}'
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDbGllbnRJZCI6ImZjOGEwZjc5LTM2NTQtNGM0Yy1iNjY5LTk2ZWRjZDhhOGU0OCIsIm5iZiI6MTcwNTc2NTE1MSwiZXhwIjoxNzA1ODUxNTUxLCJpc3MiOiJJc3N1ZXIifQ.R9ZwYe1BhSvkMoB9WpYEnGDnTd_ru5tP2xmIQUciBo0
+
+3.
+
+curl -X 'GET' \
+  'https://localhost:55555/user/get?id=fc8a0f79-3654-4c4c-b669-96edcd8a8e48' \
+  -H 'accept: text/plain' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDbGllbnRJZCI6ImZjOGEwZjc5LTM2NTQtNGM0Yy1iNjY5LTk2ZWRjZDhhOGU0OCIsIm5iZiI6MTcwNTc2NTE1MSwiZXhwIjoxNzA1ODUxNTUxLCJpc3MiOiJJc3N1ZXIifQ.R9ZwYe1BhSvkMoB9WpYEnGDnTd_ru5tP2xmIQUciBo0'
+
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "string",
+  "serName": "string",
+  "age": 0,
+  "isMale": true,
+  "interests": "string",
+  "city": "string",
+  "creationDate": "2024-01-20T15:39:51.641Z"
+}
