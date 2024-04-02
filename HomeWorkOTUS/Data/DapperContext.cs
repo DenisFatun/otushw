@@ -52,4 +52,10 @@ namespace HomeWorkOTUS.Data
     {
         IDbConnection Connection { get; }
     }
+
+    public enum SqlOrder
+    {
+        DESC,
+        ASC
+    }
 }

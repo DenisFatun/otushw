@@ -8,5 +8,6 @@ namespace HomeWorkOTUS.Infrastructure.Repos
         Task<Client> GetByLoginAndPasswordAsync(Guid id, string password);
         Task<Client> GetAsync(Guid id);
         Task<ClientSearchResponse> SearchAsync(ClientSearchFilter filter);
+        Task<IEnumerable<Guid>> GetClientIdAllAsync();
     }
 }

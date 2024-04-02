@@ -1,10 +1,12 @@
-using AutoMapper;
 using Dapper;
 using HomeWorkOTUS.Data;
 using HomeWorkOTUS.Extensions;
 using HomeWorkOTUS.Handlers;
+using HomeWorkOTUS.Services.RabbitMq;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +47,33 @@ builder.Services.AddSwaggerGen(c=> {
 });
 builder.Services.AddHttpClient();
 
+builder.Services.AddTransient<AddPostConsumer>();
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    busConfigurator.UsingRabbitMq((context, cfg) =>
+    {
+        var uri = new Uri(builder.Configuration["RabbitMqUri"]);
+        cfg.Host(uri);        
+        cfg.ReceiveEndpoint("add_post", e =>
+        {
+            e.Consumer<AddPostConsumer>(context);
+        });        
+    });    
+});
+
+builder.Services.AddSingleton(config =>
+{
+    var configurationOptions = new ConfigurationOptions
+    {
+        EndPoints = { builder.Configuration["Redis:Host"] },
+        Password = builder.Configuration["Redis:Password"]
+    };
+
+    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(configurationOptions);
+    var redisDb = Convert.ToInt32(builder.Configuration["Redis:Db"]);
+    return multiplexer.GetDatabase(redisDb);
+});
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -82,7 +111,27 @@ using (var scope = app.Services.CreateScope())
 
             ALTER TABLE clients OWNER to postgres;
             
-            CREATE INDEX IF NOT EXISTS btree_clients_name_sername_ind ON public.clients USING btree (ser_name text_pattern_ops, name text_pattern_ops);"
+            CREATE INDEX IF NOT EXISTS btree_clients_name_sername_ind ON public.clients USING btree (ser_name text_pattern_ops, name text_pattern_ops);
+
+            CREATE TABLE IF NOT EXISTS clients_friends
+            (
+                id INT GENERATED ALWAYS AS IDENTITY,
+                client_id uuid NOT NULL,
+                friend_id uuid NOT NULL,
+                CONSTRAINT fk_client FOREIGN KEY(client_id) REFERENCES clients(id),
+                CONSTRAINT fk_friend FOREIGN KEY(friend_id) REFERENCES clients(id),
+                UNIQUE (client_id, friend_id)
+            );
+    
+            CREATE TABLE IF NOT EXISTS posts
+            (
+                id INT GENERATED ALWAYS AS IDENTITY,
+                client_id uuid NOT NULL,
+                created_at TIMESTAMP DEFAULT NOW(),
+                post_text text,
+                CONSTRAINT fk_client FOREIGN KEY(client_id) REFERENCES clients(id)
+            );
+        "
     );
 }
 

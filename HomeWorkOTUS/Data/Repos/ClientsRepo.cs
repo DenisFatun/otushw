@@ -9,16 +9,14 @@ namespace HomeWorkOTUS.Data.Repos
     {
         private readonly IConfiguration _configuration;
         private readonly IDapperContext _db;
-        private readonly IDapperSlaveContext _dapperSlaveContext;
 
         private static readonly string Columns = "id, name, ser_name as SerName, age, is_male as IsMale, interests, city, creationdate as CreationDate";
 
         public ClientsRepo(
-            IConfiguration configuration, IDapperContext db, IDapperSlaveContext dapperSlaveContext)
+            IConfiguration configuration, IDapperContext db)
         {
             _configuration = configuration;
             _db = db;
-            _dapperSlaveContext = dapperSlaveContext;
         }
 
         public async Task<Guid> CreateAsync(RegistrationRequest request)
@@ -74,6 +72,12 @@ namespace HomeWorkOTUS.Data.Repos
 
             response.Items = await _db.Connection.QueryAsync<Client>(sqlCommand, new { name = filter.Name + "%", serName = filter.SerName + "%" });
             return response;
+        }
+
+        public async Task<IEnumerable<Guid>> GetClientIdAllAsync()
+        {
+            var sqlCommand = $@"select id from clients";
+            return await _db.Connection.QueryAsync<Guid>(sqlCommand);
         }
 
         private string HashPassword(string password)
