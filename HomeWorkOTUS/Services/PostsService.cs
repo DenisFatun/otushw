@@ -38,11 +38,27 @@ namespace HomeWorkOTUS.Services
         public async Task RemovePostAsync(Guid clientId, int postId)
         {
             await _postsRepo.DeleteAsync(clientId, postId);
+            var friends = await _friendsRepo.ListAsync(clientId);
+            if (friends.Any())
+            {
+                foreach (var id in friends)
+                {
+                    await ClientPostsCacheAsync(id);
+                }
+            }
         }
-
+            
         public async Task UpdatePostAsync(Guid clientId, int postId, string text)
         {
             await _postsRepo.UpdateAsync(clientId, postId, text);
+            var friends = await _friendsRepo.ListAsync(clientId);
+            if (friends.Any())
+            {
+                foreach (var id in friends)
+                {
+                    await ClientPostsCacheAsync(id);
+                }
+            }
         }
 
         public async Task<ClientPost> GetPostAsync(int postId)
