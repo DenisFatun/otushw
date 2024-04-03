@@ -1,10 +1,11 @@
-﻿using HomeWorkOTUS.Infrastructure.Services;
+﻿using HomeWorkOTUS.Handlers;
+using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Models;
 using MassTransit.Initializers;
 using StackExchange.Redis;
 
 namespace HomeWorkOTUS.Services
-{
+{    
     public class RedisService : IRedisService
     {
         private readonly IDatabase _database;

@@ -1,6 +1,9 @@
 ﻿using HomeWorkOTUS.Infrastructure.Repos;
 using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Models.Posts;
+using HomeWorkOTUS.Models.RabbitMq;
+using MassTransit;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace HomeWorkOTUS.Services
@@ -11,16 +14,19 @@ namespace HomeWorkOTUS.Services
         private readonly IFriendsRepo _friendsRepo;
         private readonly IRedisService _redisService;
         private readonly IClientsRepo _clientsRepo;
+        private readonly IBusControl _rabbitBusControl;
 
         public PostsService(IPostsRepo postsRepo, 
             IFriendsRepo friendsRepo,
             IRedisService redisService,
-            IClientsRepo clientsRepo)
+            IClientsRepo clientsRepo,
+            IBusControl rabbitBusControl)
         {
             _postsRepo = postsRepo;
             _friendsRepo = friendsRepo;
             _redisService= redisService;
             _clientsRepo = clientsRepo;
+            _rabbitBusControl = rabbitBusControl;
         }
 
         public async Task AddPostAsync(Guid clientId, string text)
@@ -30,6 +36,12 @@ namespace HomeWorkOTUS.Services
             if (friends.Any())
             {
                 var post = await _postsRepo.GetAsync(postId);
+
+                using (var source = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+                {
+                    await _rabbitBusControl.Publish(new AddedPost { Post = post, ClientIds = friends }, source.Token);
+                }
+
                 foreach (var friend in friends)
                     await _redisService.SaveListAsync(friend.ToString(), JsonSerializer.Serialize(post));
             }

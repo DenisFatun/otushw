@@ -3,12 +3,37 @@ using HomeWorkOTUS.Data;
 using HomeWorkOTUS.Extensions;
 using HomeWorkOTUS.Handlers;
 using HomeWorkOTUS.Services.RabbitMq;
+using HomeWorkOTUS.Services.SignalR;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                
+                var accessToken = context.Request.Query["access_token"];
+
+                // если запрос направлен хабу
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/post/feed/posted"))
+                {
+                    // получаем токен из строки запроса
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 builder.Services.AddScoped<IDapperContext, DapperContext>();
 builder.Services.AddScoped<IDapperSlaveContext, DapperSlaveContext>();
@@ -48,6 +73,7 @@ builder.Services.AddSwaggerGen(c=> {
 builder.Services.AddHttpClient();
 
 builder.Services.AddTransient<AddPostConsumer>();
+builder.Services.AddTransient<AddedPostConsumer>();
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.UsingRabbitMq((context, cfg) =>
@@ -57,7 +83,11 @@ builder.Services.AddMassTransit(busConfigurator =>
         cfg.ReceiveEndpoint("add_post", e =>
         {
             e.Consumer<AddPostConsumer>(context);
-        });        
+        });
+        cfg.ReceiveEndpoint("added_post_1", e =>
+        {
+            e.Consumer<AddedPostConsumer>(context);
+        });
     });    
 });
 
@@ -74,7 +104,12 @@ builder.Services.AddSingleton(config =>
     return multiplexer.GetDatabase(redisDb);
 });
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -134,5 +169,7 @@ using (var scope = app.Services.CreateScope())
         "
     );
 }
+
+app.MapHub<FeedPostedHub>("/post/feed/posted");
 
 app.Run();
