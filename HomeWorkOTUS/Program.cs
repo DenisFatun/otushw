@@ -84,8 +84,10 @@ builder.Services.AddMassTransit(busConfigurator =>
         {
             e.Consumer<AddPostConsumer>(context);
         });
-        cfg.ReceiveEndpoint("added_post_1", e =>
+        cfg.ReceiveEndpoint(Guid.NewGuid().ToString(), e =>
         {
+            e.Durable = false;
+            e.AutoDelete = true;
             e.Consumer<AddedPostConsumer>(context);
         });
     });    
