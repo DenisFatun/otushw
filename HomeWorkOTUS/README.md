@@ -1,5 +1,6 @@
 ﻿из корня проекта:
 docker-compose up -d
+docker-compose restart
 
 свагер будет по адресу:
 https://localhost:55555/swagger/index.html
@@ -64,3 +65,6 @@ docker restart pgslave1
 docker cp D:\temp\docker\pgslave2\. pgslave2:/var/lib/postgresql/data
 
 docker restart pgslave2
+
+
+docker exec -it mytarantool console

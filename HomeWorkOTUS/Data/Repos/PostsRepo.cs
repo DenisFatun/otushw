@@ -4,7 +4,7 @@ using HomeWorkOTUS.Models.Posts;
 
 namespace HomeWorkOTUS.Data.Repos
 {
-    public class PostsRepo : IPostsRepo
+    public class PostsRepo //: IPostsRepo
     {
         private readonly IDapperContext _db;
 
@@ -92,6 +92,23 @@ namespace HomeWorkOTUS.Data.Repos
                 clientId,
                 limit = filter.Limit,
                 offset = filter.Offset
+            });
+        }
+
+        public async Task<IEnumerable<ClientPostSimple>> PostsByAuthorAsync(Guid clientId)
+        {
+            var sql = $@"SELECT
+                            p.id as Id,
+                            p.client_id as Author,
+                            p.post_text as Text,
+                            p.created_at as Created
+                        FROM posts p
+                        WHERE p.client_id = @clientId";
+
+            return await _db.Connection.QueryAsync<ClientPostSimple>(sql,
+            new
+            {
+                clientId
             });
         }
     }

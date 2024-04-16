@@ -10,5 +10,6 @@ namespace HomeWorkOTUS.Infrastructure.Repos
         Task UpdateAsync(Guid clientId, int id, string text);
         Task<ClientPost> GetAsync(int id);
         Task<IEnumerable<ClientPost>> ListAsync(Guid clientId, PostListFilter filter, SqlOrder order = SqlOrder.DESC);
+        Task<IEnumerable<ClientPostSimple>> PostsByAuthorAsync(Guid clientId);
     }
 }

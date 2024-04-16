@@ -106,5 +106,15 @@ namespace HomeWorkOTUS.Services
             foreach (var post in posts)
                 await _redisService.SaveListAsync(clientId.ToString(), JsonSerializer.Serialize(post));            
         }
+
+        public async Task<IEnumerable<ClientPostSimple>> PostsByAuthorAsync(Guid clientId)
+        {
+            return await _postsRepo.PostsByAuthorAsync(clientId);
+        }
+
+        public async Task AddPostSimpleAsync(Guid clientId, string text)
+        {
+            await _postsRepo.CreateAsync(clientId, text);
+        }
     }
 }

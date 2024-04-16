@@ -7,4 +7,9 @@
         public string Text { get; set; }
         public DateTime Created { get; set; }
     }
+
+    public class ClientPostSimple : ClientPost
+    {
+        public new Guid Author { get; set; }
+    }
 }

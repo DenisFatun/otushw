@@ -11,7 +11,8 @@ namespace HomeWorkOTUS.Controllers
         private readonly ITechnicalService _technicalService;
         private readonly IPostsService _postsService;
 
-        public TechnicalController(ITechnicalService technicalService, IPostsService postsService)
+        public TechnicalController(ITechnicalService technicalService, 
+            IPostsService postsService)
         {
             _technicalService = technicalService;
             _postsService = postsService;

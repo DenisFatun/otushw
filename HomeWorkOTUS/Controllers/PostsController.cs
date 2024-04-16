@@ -26,9 +26,10 @@ namespace HomeWorkOTUS.Controllers
         [ProducesResponseType(typeof(string), 200)]
         public async Task<IActionResult> AddPostAsync([FromBody] string text)
         {
-            using var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            //using var source = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             var claims = (TokenClaims)HttpContext.Items["User"];
-            await _rabbitBusControl.Publish(new AddPost { ClientId = claims.ClientId, Text = text }, source.Token);
+            await _postService.AddPostSimpleAsync(claims.ClientId, text);
+            //await _rabbitBusControl.Publish(new AddPost { ClientId = claims.ClientId, Text = text }, source.Token);
             return Ok("Успешно создан пост");
         }
 
@@ -72,8 +73,17 @@ namespace HomeWorkOTUS.Controllers
         public async Task<IActionResult> ListPostAsync([FromQuery] PostListFilter request)
         {
             var claims = (TokenClaims)HttpContext.Items["User"];
-            var post = await _postService.ListPostAsync(claims.ClientId, request);
-            return Ok(post);
+            var posts = await _postService.ListPostAsync(claims.ClientId, request);
+            return Ok(posts);
+        }
+
+        [HttpGet("self-list")]
+        [ProducesResponseType(typeof(List<ClientPostSimple>), 200)]
+        public async Task<IActionResult> AddPostAsync()
+        {
+            var claims = (TokenClaims)HttpContext.Items["User"];
+            var posts = await _postService.PostsByAuthorAsync(claims.ClientId);
+            return Ok(posts);
         }
     }
 }

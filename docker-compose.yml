@@ -57,6 +57,19 @@ services:
     networks:
       - somenetweork
 
+ tarantool:
+    image: tarantool/tarantool:1.7
+    container_name: tarantool
+    restart: always
+    command: tarantool /usr/local/share/tarantool/app.init.lua
+    ports:
+      - 3301:3301
+      - 55556:8080
+    volumes:
+      - d:/tarantool/app:/usr/local/share/tarantool
+      - d:/tarantool/data:/var/lib/tarantool
+    networks:
+      - somenetweork
 
  # postgres_slave1:
  #  image: postgres:latest

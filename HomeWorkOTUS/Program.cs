@@ -1,7 +1,9 @@
 using Dapper;
 using HomeWorkOTUS.Data;
+using HomeWorkOTUS.Data.Repos;
 using HomeWorkOTUS.Extensions;
 using HomeWorkOTUS.Handlers;
+using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Services.RabbitMq;
 using HomeWorkOTUS.Services.SignalR;
 using MassTransit;
@@ -105,6 +107,9 @@ builder.Services.AddSingleton(config =>
     var redisDb = Convert.ToInt32(builder.Configuration["Redis:Db"]);
     return multiplexer.GetDatabase(redisDb);
 });
+
+var tarantoolUrl = new Uri(builder.Configuration["TarantoolUrl"]);
+builder.Services.AddHttpClient(PostsRepoTarantool.HttpClientName, httpClient => httpClient.BaseAddress = tarantoolUrl);
 
 builder.Services.AddSignalR();
 

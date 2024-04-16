@@ -11,5 +11,7 @@ namespace HomeWorkOTUS.Infrastructure.Services
         Task<IEnumerable<ClientPost>> ListPostFromCacheAsync(Guid clientId, PostListFilter filter);
         Task<IEnumerable<ClientPost>> ListPostAsync(Guid clientId, PostListFilter filter);
         Task<int> UpdatePostCacheAsync(List<Guid> clientIdList);
+        Task<IEnumerable<ClientPostSimple>> PostsByAuthorAsync(Guid clientId);
+        Task AddPostSimpleAsync(Guid clientId, string text);
     }
 }
