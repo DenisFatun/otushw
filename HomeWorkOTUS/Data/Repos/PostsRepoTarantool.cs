@@ -5,7 +5,7 @@ using RestSharp;
 
 namespace HomeWorkOTUS.Data.Repos
 {
-    public class PostsRepoTarantool : IPostsRepo
+    public class PostsRepoTarantool
     {
         public static readonly string HttpClientName = "http_client_tarantool";
         private readonly RestClient _restClient;

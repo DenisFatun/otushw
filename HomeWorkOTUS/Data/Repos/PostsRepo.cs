@@ -4,7 +4,7 @@ using HomeWorkOTUS.Models.Posts;
 
 namespace HomeWorkOTUS.Data.Repos
 {
-    public class PostsRepo //: IPostsRepo
+    public class PostsRepo : IPostsRepo
     {
         private readonly IDapperContext _db;
 

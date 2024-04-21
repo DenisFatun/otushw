@@ -7,6 +7,9 @@ https://localhost:55555/swagger/index.html
 
 rm -rf pgslave1 - удалить директорию
 
+запуск цитуса
+docker-compose -p citus up --scale worker=2 -d
+
 docker run --name otusdb -e POSTGRES_PASSWORD=postgres123 -p 5432:5432 -d postgres
 docker exec -it otusdb bash
 psql -h localhost -U postgres

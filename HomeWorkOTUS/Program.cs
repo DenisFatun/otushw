@@ -147,11 +147,7 @@ using (var scope = app.Services.CreateScope())
                 creationdate timestamp NOT NULL,
                 password character varying(512) NOT NULL,
                 CONSTRAINT pl_clients PRIMARY KEY (id)
-            )
-
-            TABLESPACE pg_default;
-
-            ALTER TABLE clients OWNER to postgres;
+            );
             
             CREATE INDEX IF NOT EXISTS btree_clients_name_sername_ind ON public.clients USING btree (ser_name text_pattern_ops, name text_pattern_ops);
 
@@ -171,6 +167,7 @@ using (var scope = app.Services.CreateScope())
                 client_id uuid NOT NULL,
                 created_at TIMESTAMP DEFAULT NOW(),
                 post_text text,
+                CONSTRAINT pk_posts PRIMARY KEY (id),
                 CONSTRAINT fk_client FOREIGN KEY(client_id) REFERENCES clients(id)
             );
         "
