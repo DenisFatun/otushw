@@ -1,13 +1,12 @@
-﻿using HomeWorkOTUS.Handlers;
+﻿using CommonLib.Handlers;
 using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Models.Clients;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
-namespace HomeWorkOTUS.Controllers
+namespace HomeWorkOTUS.Controllers.v1
 {
-    [Route("user")]
-    [ApiController]    
+    [ApiController]
+    [Route("v1/user")]
     public class ClientsController : ControllerBase
     {
         private readonly IClientsService _clientsService;
@@ -41,7 +40,7 @@ namespace HomeWorkOTUS.Controllers
         public async Task<IActionResult> Get([FromQuery] Guid id)
         {
             var client = await _clientsService.GetAsync(id);
-            if ( client == null)
+            if (client == null)
                 return NotFound("Пользователь не найден");
             return Ok(client);
         }
@@ -50,7 +49,7 @@ namespace HomeWorkOTUS.Controllers
         [ProducesResponseType(typeof(ClientSearchResponse), 200)]
         public async Task<IActionResult> Search([FromQuery] ClientSearchFilter filter)
         {
-            var response = await _clientsService.SearchAsync(filter);            
+            var response = await _clientsService.SearchAsync(filter);
             return Ok(response);
         }
     }

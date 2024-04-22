@@ -1,9 +1,9 @@
-﻿using HomeWorkOTUS.Infrastructure.Repos;
+﻿using CommonLib.Data;
+using HomeWorkOTUS.Infrastructure.Repos;
 using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Models.Posts;
 using HomeWorkOTUS.Models.RabbitMq;
 using MassTransit;
-using System.Security.Claims;
 using System.Text.Json;
 
 namespace HomeWorkOTUS.Services
@@ -102,7 +102,7 @@ namespace HomeWorkOTUS.Services
         private async Task ClientPostsCacheAsync(Guid clientId)
         {
             await _redisService.RemoveListAsync(clientId.ToString());
-            var posts = await _postsRepo.ListAsync(clientId, new PostListFilter { Offset = 0, Limit = 100 }, Data.SqlOrder.ASC);
+            var posts = await _postsRepo.ListAsync(clientId, new PostListFilter { Offset = 0, Limit = 100 }, SqlOrder.ASC);
             foreach (var post in posts)
                 await _redisService.SaveListAsync(clientId.ToString(), JsonSerializer.Serialize(post));            
         }

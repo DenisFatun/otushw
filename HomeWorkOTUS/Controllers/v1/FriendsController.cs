@@ -1,11 +1,11 @@
-﻿using HomeWorkOTUS.Handlers;
+﻿using CommonLib.Handlers;
+using CommonLib.Models.Token;
 using HomeWorkOTUS.Infrastructure.Services;
-using HomeWorkOTUS.Models.Token;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeWorkOTUS.Controllers
+namespace HomeWorkOTUS.Controllers.v1
 {
-    [Route("friend")]
+    [Route("v1/friend")]
     [ApiController]
     [Authorize]
     public class FriendsController : ControllerBase

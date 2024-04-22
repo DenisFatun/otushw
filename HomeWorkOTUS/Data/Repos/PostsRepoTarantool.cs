@@ -1,4 +1,4 @@
-﻿using HomeWorkOTUS.Infrastructure.Repos;
+﻿using CommonLib.Data;
 using HomeWorkOTUS.Models.Posts;
 using MassTransit;
 using RestSharp;

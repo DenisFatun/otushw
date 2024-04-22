@@ -1,4 +1,6 @@
-﻿namespace HomeWorkOTUS.Infrastructure.Services
+﻿using CommonLib.Infrastructure.Services;
+
+namespace HomeWorkOTUS.Infrastructure.Services
 {
     public interface IFriendsService : IService
     {

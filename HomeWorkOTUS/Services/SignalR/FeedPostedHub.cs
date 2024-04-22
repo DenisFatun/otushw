@@ -1,4 +1,4 @@
-﻿using HomeWorkOTUS.Infrastructure.Services;
+﻿using CommonLib.Infrastructure.Services;
 using Microsoft.AspNetCore.SignalR;
 
 namespace HomeWorkOTUS.Services.SignalR

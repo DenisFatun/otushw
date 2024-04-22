@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using CommonLib.Data;
+using Dapper;
 using HomeWorkOTUS.Infrastructure.Repos;
 
 namespace HomeWorkOTUS.Data.Repos

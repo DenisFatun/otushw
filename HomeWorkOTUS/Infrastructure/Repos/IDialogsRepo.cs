@@ -1,4 +1,5 @@
-﻿using HomeWorkOTUS.Models.Dialogs;
+﻿using CommonLib.Infrastructure.Repos;
+using HomeWorkOTUS.Models.Dialogs;
 
 namespace HomeWorkOTUS.Infrastructure.Repos
 {

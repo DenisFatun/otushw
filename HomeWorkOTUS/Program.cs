@@ -1,77 +1,46 @@
+using CommonLib.Data;
+using CommonLib.Extensions;
 using Dapper;
 using HomeWorkOTUS.Data;
-using HomeWorkOTUS.Data.Repos;
-using HomeWorkOTUS.Extensions;
-using HomeWorkOTUS.Handlers;
-using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Services.RabbitMq;
 using HomeWorkOTUS.Services.SignalR;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
+//builder.Services.AddAuthorization();
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        options.Events = new JwtBearerEvents
+//        {
+//            OnMessageReceived = context =>
+//            {
                 
-                var accessToken = context.Request.Query["access_token"];
+//                var accessToken = context.Request.Query["access_token"];
 
-                // если запрос направлен хабу
-                var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/post/feed/posted"))
-                {
-                    // получаем токен из строки запроса
-                    context.Token = accessToken;
-                }
-                return Task.CompletedTask;
-            }
-        };
-    });
+//                // если запрос направлен хабу
+//                var path = context.HttpContext.Request.Path;
+//                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/post/feed/posted"))
+//                {
+//                    // получаем токен из строки запроса
+//                    context.Token = accessToken;
+//                }
+//                return Task.CompletedTask;
+//            }
+//        };
+//    });
 
 builder.Services.AddScoped<IDapperContext, DapperContext>();
 builder.Services.AddScoped<IDapperSlaveContext, DapperSlaveContext>();
 
 builder.Services.AddServices();
 builder.Services.AddRepositories();
+builder.Services.AddSwaggerService(["v1", "v2"]);
 
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c=> {
-    c.DescribeAllParametersInCamelCase();
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme.",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Scheme = "bearer",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT"
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            new List<string>()
-                        }
-                    });
-});
 builder.Services.AddHttpClient();
 
 builder.Services.AddTransient<AddPostConsumer>();
@@ -108,28 +77,16 @@ builder.Services.AddSingleton(config =>
     return multiplexer.GetDatabase(redisDb);
 });
 
-var tarantoolUrl = new Uri(builder.Configuration["TarantoolUrl"]);
-builder.Services.AddHttpClient(PostsRepoTarantool.HttpClientName, httpClient => httpClient.BaseAddress = tarantoolUrl);
+//var tarantoolUrl = new Uri(builder.Configuration["TarantoolUrl"]);
+//builder.Services.AddHttpClient(PostsRepoTarantool.HttpClientName, httpClient => httpClient.BaseAddress = tarantoolUrl);
 
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
+app.AddDefaultWebApp();
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.UseHttpsRedirection();
-
-app.UseMiddleware<JwtMiddleware>();
+app.AddSwaggerWebApp(["v1", "v2"]);
 
 using (var scope = app.Services.CreateScope())
 {

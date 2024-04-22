@@ -2,16 +2,16 @@
 using HomeWorkOTUS.Models.Technical;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeWorkOTUS.Controllers
+namespace HomeWorkOTUS.Controllers.v2
 {
-    [Route("technical")]
+    [Route("v1/technical")]
     [ApiController]
     public class TechnicalController : ControllerBase
     {
         private readonly ITechnicalService _technicalService;
         private readonly IPostsService _postsService;
 
-        public TechnicalController(ITechnicalService technicalService, 
+        public TechnicalController(ITechnicalService technicalService,
             IPostsService postsService)
         {
             _technicalService = technicalService;

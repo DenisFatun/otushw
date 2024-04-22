@@ -1,4 +1,5 @@
-﻿using HomeWorkOTUS.Models.Clients;
+﻿using CommonLib.Infrastructure.Repos;
+using HomeWorkOTUS.Models.Clients;
 
 namespace HomeWorkOTUS.Infrastructure.Repos
 {

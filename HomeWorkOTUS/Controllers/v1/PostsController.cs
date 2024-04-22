@@ -1,14 +1,13 @@
-﻿using HomeWorkOTUS.Handlers;
+﻿using CommonLib.Handlers;
+using CommonLib.Models.Token;
 using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Models.Posts;
-using HomeWorkOTUS.Models.RabbitMq;
-using HomeWorkOTUS.Models.Token;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeWorkOTUS.Controllers
+namespace HomeWorkOTUS.Controllers.v1
 {
-    [Route("post")]
+    [Route("v1/post")]
     [ApiController]
     [Authorize]
     public class PostsController : ControllerBase

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeWorkOTUS", "HomeWorkOTU
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9E4C2344-4AB9-4831-9D1A-5DE557414449}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "..\CommonLib\CommonLib.csproj", "{72DF0193-01FB-4141-86A3-E55F158B15F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9E4C2344-4AB9-4831-9D1A-5DE557414449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E4C2344-4AB9-4831-9D1A-5DE557414449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E4C2344-4AB9-4831-9D1A-5DE557414449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72DF0193-01FB-4141-86A3-E55F158B15F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72DF0193-01FB-4141-86A3-E55F158B15F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72DF0193-01FB-4141-86A3-E55F158B15F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72DF0193-01FB-4141-86A3-E55F158B15F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

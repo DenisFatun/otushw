@@ -1,4 +1,5 @@
-﻿using HomeWorkOTUS.Infrastructure.Repos;
+﻿using CommonLib.Infrastructure.Services;
+using HomeWorkOTUS.Infrastructure.Repos;
 using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Models.Clients;
 
@@ -25,7 +26,7 @@ namespace HomeWorkOTUS.Services
             if (client == null)
                 return string.Empty;
 
-            var token = _jwtService.GetToken(new Models.Token.TokenClaims { ClientId = request.ClientId });
+            var token = _jwtService.GetToken(new CommonLib.Models.Token.TokenClaims { ClientId = request.ClientId });
             return token.ToString();
         }
 

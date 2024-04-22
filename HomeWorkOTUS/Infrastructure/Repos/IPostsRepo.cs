@@ -1,4 +1,5 @@
-﻿using HomeWorkOTUS.Data;
+﻿using CommonLib.Data;
+using CommonLib.Infrastructure.Repos;
 using HomeWorkOTUS.Models.Posts;
 
 namespace HomeWorkOTUS.Infrastructure.Repos

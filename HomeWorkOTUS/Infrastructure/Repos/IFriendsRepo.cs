@@ -1,4 +1,6 @@
-﻿namespace HomeWorkOTUS.Infrastructure.Repos
+﻿using CommonLib.Infrastructure.Repos;
+
+namespace HomeWorkOTUS.Infrastructure.Repos
 {
     public interface IFriendsRepo : IRepo
     {

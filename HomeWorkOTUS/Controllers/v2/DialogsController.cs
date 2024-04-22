@@ -1,24 +1,24 @@
-﻿using HomeWorkOTUS.Handlers;
+﻿using CommonLib.Handlers;
+using CommonLib.Models.Token;
 using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Models.Dialogs;
-using HomeWorkOTUS.Models.Token;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeWorkOTUS.Controllers
+namespace HomeWorkOTUS.Controllers.v2
 {
-    [Route("friend")]
+    [Route("v1/dialog")]
     [ApiController]
     [Authorize]
-    public class DialogController : ControllerBase
+    public class DialogsController : ControllerBase
     {
         private readonly IDialogsService _dialogsService;
 
-        public DialogController(IDialogsService dialogsService)
+        public DialogsController(IDialogsService dialogsService)
         {
             _dialogsService = dialogsService;
         }
 
-        [HttpPost("dialog/{toClient:guid}/send")]
+        [HttpPost("{toClient:guid}/send")]
         [ProducesResponseType(typeof(string), 200)]
         public async Task<IActionResult> SendAsync(Guid toClient, [FromBody] DialogBase dialog)
         {
@@ -27,7 +27,7 @@ namespace HomeWorkOTUS.Controllers
             return Ok("Успешно отправлено сообщение");
         }
 
-        [HttpGet("dialog/{fromClient:guid}/list")]
+        [HttpGet("{fromClient:guid}/list")]
         [ProducesResponseType(typeof(IEnumerable<DialogBase>), 200)]
         public async Task<IActionResult> ListAsync(Guid fromClient)
         {

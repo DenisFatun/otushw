@@ -1,5 +1,5 @@
-﻿using HomeWorkOTUS.Models;
-using HomeWorkOTUS.Models.Posts;
+﻿using CommonLib.Infrastructure.Services;
+using HomeWorkOTUS.Models;
 
 namespace HomeWorkOTUS.Infrastructure.Services
 {
