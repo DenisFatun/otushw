@@ -170,6 +170,16 @@ using (var scope = app.Services.CreateScope())
                 CONSTRAINT pk_posts PRIMARY KEY (id),
                 CONSTRAINT fk_client FOREIGN KEY(client_id) REFERENCES clients(id)
             );
+
+            CREATE TABLE IF NOT EXISTS dialogs
+            (
+                id INT GENERATED ALWAYS AS IDENTITY,
+                to_client_id uuid NOT NULL,
+                from_client_id uuid NOT NULL,
+                created_at TIMESTAMP DEFAULT NOW(),
+                message text,
+                CONSTRAINT pk_dialogs PRIMARY KEY (id, to_client_id)                
+            );
         "
     );
 }
