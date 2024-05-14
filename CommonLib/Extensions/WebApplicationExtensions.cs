@@ -5,11 +5,6 @@ namespace CommonLib.Extensions
 {
     public static class WebApplicationExtensions
     {
-        public static void AddDefaultWebApp(this WebApplication app)
-        {            
-            app.UseMiddleware<JwtMiddleware>();
-        }
-
         public static void AddSwaggerWebApp(this WebApplication app, string[] versions)
         {
             app.UseSwagger();

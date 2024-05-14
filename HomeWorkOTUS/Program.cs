@@ -1,5 +1,6 @@
 using CommonLib.Data;
 using CommonLib.Extensions;
+using CommonLib.Handlers;
 using Dapper;
 using HomeWorkOTUS.Services.RabbitMq;
 using HomeWorkOTUS.Services.SignalR;
@@ -83,14 +84,7 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-
-app.MapControllers();
-app.AddDefaultWebApp();
+app.UseMiddleware<JwtMiddleware>();
 
 app.AddSwaggerWebApp(["v1", "v2"]);
 
@@ -148,6 +142,13 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapHub<FeedPostedHub>("/post/feed/posted");
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
