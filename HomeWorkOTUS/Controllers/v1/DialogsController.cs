@@ -4,7 +4,7 @@ using HomeWorkOTUS.Infrastructure.Services;
 using HomeWorkOTUS.Models.Dialogs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeWorkOTUS.Controllers.v2
+namespace HomeWorkOTUS.Controllers.v1
 {
     [Route("v1/dialog")]
     [ApiController]

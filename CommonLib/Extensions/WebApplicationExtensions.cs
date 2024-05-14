@@ -6,18 +6,7 @@ namespace CommonLib.Extensions
     public static class WebApplicationExtensions
     {
         public static void AddDefaultWebApp(this WebApplication app)
-        {
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.UseHttpsRedirection();
-
+        {            
             app.UseMiddleware<JwtMiddleware>();
         }
 

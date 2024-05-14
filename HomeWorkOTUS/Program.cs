@@ -1,7 +1,6 @@
 using CommonLib.Data;
 using CommonLib.Extensions;
 using Dapper;
-using HomeWorkOTUS.Data;
 using HomeWorkOTUS.Services.RabbitMq;
 using HomeWorkOTUS.Services.SignalR;
 using MassTransit;
@@ -11,31 +10,31 @@ using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Services.AddAuthorization();
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddJwtBearer(options =>
-//    {
-//        options.Events = new JwtBearerEvents
-//        {
-//            OnMessageReceived = context =>
-//            {
-                
-//                var accessToken = context.Request.Query["access_token"];
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
 
-//                // если запрос направлен хабу
-//                var path = context.HttpContext.Request.Path;
-//                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/post/feed/posted"))
-//                {
-//                    // получаем токен из строки запроса
-//                    context.Token = accessToken;
-//                }
-//                return Task.CompletedTask;
-//            }
-//        };
-//    });
+                var accessToken = context.Request.Query["access_token"];
+
+                // если запрос направлен хабу
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/post/feed/posted"))
+                {
+                    // получаем токен из строки запроса
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 builder.Services.AddScoped<IDapperContext, DapperContext>();
-builder.Services.AddScoped<IDapperSlaveContext, DapperSlaveContext>();
+//builder.Services.AddScoped<IDapperSlaveContext, DapperSlaveContext>();
 
 builder.Services.AddServices();
 builder.Services.AddRepositories();
@@ -84,6 +83,13 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+
+app.MapControllers();
 app.AddDefaultWebApp();
 
 app.AddSwaggerWebApp(["v1", "v2"]);
@@ -142,5 +148,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapHub<FeedPostedHub>("/post/feed/posted");
+app.UseHttpsRedirection();
 
 app.Run();

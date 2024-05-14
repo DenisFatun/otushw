@@ -39,7 +39,7 @@ namespace CommonLib.Services
                 IssuerSigningKey = CommonFunc.GetSymmetricSecurityKey(_configuration["RefreshToken:SecretKey"]),
                 ValidateIssuerSigningKey = true,
                 ValidateAudience = false,
-                ValidIssuer = "Issuer",
+                ValidateIssuer = false,
                 ClockSkew = TimeSpan.FromSeconds(Convert.ToInt32(_configuration["RefreshToken:ClockSkewSeconds"]))
             }, out SecurityToken validatedToken);
 
