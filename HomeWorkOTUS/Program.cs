@@ -2,6 +2,7 @@ using CommonLib.Data;
 using CommonLib.Extensions;
 using CommonLib.Handlers;
 using Dapper;
+using HomeWorkOTUS.Services;
 using HomeWorkOTUS.Services.RabbitMq;
 using HomeWorkOTUS.Services.SignalR;
 using MassTransit;
@@ -10,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddOpenTelemetry("HomeWorkOTUS");
+builder.Services.AddOpenTelemetry("HomeWorkOTUS");
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -42,6 +46,7 @@ builder.Services.AddRepositories();
 builder.Services.AddSwaggerService(["v1", "v2"]);
 
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<AddPostConsumer>();
 builder.Services.AddTransient<AddedPostConsumer>();
@@ -79,6 +84,9 @@ builder.Services.AddSingleton(config =>
 
 //var tarantoolUrl = new Uri(builder.Configuration["TarantoolUrl"]);
 //builder.Services.AddHttpClient(PostsRepoTarantool.HttpClientName, httpClient => httpClient.BaseAddress = tarantoolUrl);
+
+var dialogsUrl = new Uri(builder.Configuration["DialogsUrl"]);
+builder.Services.AddHttpClient(DialogsService.HttpClientName, httpClient => httpClient.BaseAddress = dialogsUrl);
 
 builder.Services.AddSignalR();
 

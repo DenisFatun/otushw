@@ -1,10 +1,10 @@
 ﻿using CommonLib.Handlers;
-using HomeWorkOTUS.Infrastructure.Services;
-using HomeWorkOTUS.Models.Dialogs;
+using CommonLib.Models.Token;
+using DialogsApp.Infrastructure.Services;
+using DialogsApp.Models.Dialogs;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
-namespace HomeWorkOTUS.Controllers.v1
+namespace DialogsApp.Controllers.v1
 {
     [Route("v1/dialog")]
     [ApiController]
@@ -22,7 +22,8 @@ namespace HomeWorkOTUS.Controllers.v1
         [ProducesResponseType(typeof(string), 200)]
         public async Task<IActionResult> SendAsync(Guid toClient, [FromBody] DialogBase dialog)
         {
-            await _dialogsService.SendAsync(toClient, dialog);
+            var claims = (TokenClaims)HttpContext.Items["User"];
+            await _dialogsService.SendAsync(toClient, claims.ClientId, dialog);
             return Ok("Успешно отправлено сообщение");
         }
 
@@ -30,7 +31,8 @@ namespace HomeWorkOTUS.Controllers.v1
         [ProducesResponseType(typeof(IEnumerable<DialogBase>), 200)]
         public async Task<IActionResult> ListAsync(Guid fromClient)
         {
-            var result = await _dialogsService.ListAsync(fromClient);
+            var claims = (TokenClaims)HttpContext.Items["User"];
+            var result = await _dialogsService.ListAsync(claims.ClientId, fromClient);
             return Ok(result);
         }
     }

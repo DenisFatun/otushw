@@ -42,12 +42,26 @@ services:
 
  homeworkotus:
   image: ${DOCKER_REGISTRY-}homeworkotus
-  container_name: otuswebapicont
+  container_name: otuswebapi
   build:
    context: .
    dockerfile: /HomeWorkOTUS/Dockerfile
   ports:
-   - '55555:8081'
+   - '55555:8080'
+  networks:
+   - somenetwork
+  depends_on:
+   - postgres_db
+   - rabbitmq
+
+ dialogsapp:
+  image: ${DOCKER_REGISTRY-}dialogsapp
+  container_name: dialogswebapi
+  build:
+   context: .
+   dockerfile: /DialogsApp/Dockerfile
+  ports:
+   - '55556:8080'
   networks:
    - somenetwork
   depends_on:

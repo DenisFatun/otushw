@@ -3,7 +3,8 @@ docker-compose up -d
 docker-compose restart
 
 свагер будет по адресу:
-https://localhost:55555/swagger/index.html
+http://localhost:55555/swagger/index.html
+http://localhost:55556/swagger/index.html
 
 rm -rf pgslave1 - удалить директорию
 

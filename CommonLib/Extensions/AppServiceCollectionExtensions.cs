@@ -2,8 +2,14 @@
 using CommonLib.Infrastructure.Repos;
 using CommonLib.Infrastructure.Services;
 using CommonLib.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using System.Reflection;
 
 namespace CommonLib.Extensions
@@ -91,6 +97,30 @@ namespace CommonLib.Extensions
                     });
                 }
             });
+        }
+
+        public static void AddOpenTelemetry(this WebApplicationBuilder builder,  string serviceName)
+        {
+            builder.Logging.AddOpenTelemetry(options =>
+            {
+                options
+                    .SetResourceBuilder(
+                        ResourceBuilder.CreateDefault()
+                            .AddService(serviceName))
+                    .AddConsoleExporter();
+            });
+        }
+
+        public static void AddOpenTelemetry(this IServiceCollection services, string serviceName)
+        {
+            services.AddOpenTelemetry()
+                .ConfigureResource(resource => resource.AddService(serviceName))
+                .WithTracing(tracing => tracing
+                .AddAspNetCoreInstrumentation()
+                .AddConsoleExporter())
+                .WithMetrics(metrics => metrics
+                .AddAspNetCoreInstrumentation()
+                .AddConsoleExporter());
         }
     }
 }

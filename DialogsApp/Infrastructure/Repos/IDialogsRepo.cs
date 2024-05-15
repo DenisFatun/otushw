@@ -1,7 +1,7 @@
 ﻿using CommonLib.Infrastructure.Repos;
-using HomeWorkOTUS.Models.Dialogs;
+using DialogsApp.Models.Dialogs;
 
-namespace HomeWorkOTUS.Infrastructure.Repos
+namespace DialogsApp.Infrastructure.Repos
 {
     public interface IDialogsRepo : IRepo
     {

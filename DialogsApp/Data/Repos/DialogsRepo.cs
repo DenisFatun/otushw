@@ -1,9 +1,9 @@
 ﻿using CommonLib.Data;
 using Dapper;
-using HomeWorkOTUS.Infrastructure.Repos;
-using HomeWorkOTUS.Models.Dialogs;
+using DialogsApp.Infrastructure.Repos;
+using DialogsApp.Models.Dialogs;
 
-namespace HomeWorkOTUS.Data.Repos
+namespace DialogsApp.Data.Repos
 {
     public class DialogsRepo : IDialogsRepo
     {

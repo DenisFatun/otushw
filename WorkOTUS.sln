@@ -9,6 +9,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib", "CommonLib\CommonLib.csproj", "{2675F8D1-8D9B-4214-A249-AB3E7BCD5989}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DialogsApp", "DialogsApp\DialogsApp.csproj", "{12789483-CAD1-42F3-B983-356679650BE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2675F8D1-8D9B-4214-A249-AB3E7BCD5989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2675F8D1-8D9B-4214-A249-AB3E7BCD5989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2675F8D1-8D9B-4214-A249-AB3E7BCD5989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12789483-CAD1-42F3-B983-356679650BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12789483-CAD1-42F3-B983-356679650BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12789483-CAD1-42F3-B983-356679650BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12789483-CAD1-42F3-B983-356679650BE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
