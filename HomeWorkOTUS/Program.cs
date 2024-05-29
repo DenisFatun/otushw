@@ -2,6 +2,7 @@ using CommonLib.Data;
 using CommonLib.Extensions;
 using CommonLib.Handlers;
 using Dapper;
+using HomeWorkOTUS.Data;
 using HomeWorkOTUS.Services;
 using HomeWorkOTUS.Services.RabbitMq;
 using HomeWorkOTUS.Services.SignalR;
@@ -39,7 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddScoped<IDapperContext, DapperContext>();
-//builder.Services.AddScoped<IDapperSlaveContext, DapperSlaveContext>();
+builder.Services.AddScoped<IDapperSlaveContext, DapperSlaveContext>();
 
 builder.Services.AddServices();
 builder.Services.AddRepositories();

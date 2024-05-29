@@ -6,7 +6,7 @@ namespace HomeWorkOTUS.Data
     public class DapperSlaveContext : IDapperSlaveContext, IDisposable
     {
         private NpgsqlConnection? _sqlConnection;
-        private const string GetConnectionStringKey = "PsqlConnectionSlave1";
+        private const string GetConnectionStringKey = "PsqlConnectionSlave";
 
         public DapperSlaveContext(IConfiguration configuration)
         {

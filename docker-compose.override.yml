@@ -1,7 +1,17 @@
 version: '3.4'
 
 services:
-  homeworkotus:
+  homeworkotus1:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "8080"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  homeworkotus2:
     environment:
       - ASPNETCORE_ENVIRONMENT=Release
       - ASPNETCORE_HTTP_PORTS=8080

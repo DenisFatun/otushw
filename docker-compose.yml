@@ -40,14 +40,28 @@ services:
  #    depends_on: [master]
  #    environment: *AUTH
 
- homeworkotus:
+ homeworkotus1:
   image: ${DOCKER_REGISTRY-}homeworkotus
-  container_name: otuswebapi
+  container_name: otuswebapi1
   build:
    context: .
    dockerfile: /HomeWorkOTUS/Dockerfile
   ports:
    - '55555:8080'
+  networks:
+   - somenetwork
+  depends_on:
+   - postgres_db
+   - rabbitmq
+
+ homeworkotus2:
+  image: ${DOCKER_REGISTRY-}homeworkotus
+  container_name: otuswebapi2
+  build:
+   context: .
+   dockerfile: /HomeWorkOTUS/Dockerfile
+  ports:
+   - '55556:8080'
   networks:
    - somenetwork
   depends_on:
@@ -61,7 +75,7 @@ services:
    context: .
    dockerfile: /DialogsApp/Dockerfile
   ports:
-   - '55556:8080'
+   - '55566:8080'
   networks:
    - somenetwork
   depends_on:
@@ -77,8 +91,49 @@ services:
    - POSTGRES_PASSWORD=pass
   ports:
    - '5432:5432'
+  volumes:
+   - D:/temp/pg/pgmaster:/var/lib/postgresql/data
   networks:
    - somenetwork
+
+ postgres_slave1:
+  image: postgres:latest
+  container_name: pgslave1
+  environment:
+   - POSTGRES_DB=otusdb
+   - POSTGRES_USER=postgres
+   - POSTGRES_PASSWORD=pass
+  ports:
+   - '15432:5432'
+  volumes:
+   - D:/temp/pg/pgslave1:/var/lib/postgresql/data
+  networks:
+   - somenetwork
+
+ postgres_slave2:
+  image: postgres:latest
+  container_name: pgslave2
+  environment:
+   - POSTGRES_DB=otusdb
+   - POSTGRES_USER=postgres
+   - POSTGRES_PASSWORD=pass
+  ports:
+   - '25432:5432'
+  volumes:
+   - D:/temp/pg/pgslave2:/var/lib/postgresql/data
+  networks:
+   - somenetwork
+   
+ nginx-server:
+  image: nginx:latest
+  container_name: nginx
+  ports: 
+   - '55554:8080'
+   - '35432:5432'
+  volumes: 
+   - D:/temp/pg/nginx/nginx.conf:/etc/nginx/nginx.conf
+  networks: 
+   - somenetwork 
 
  rabbitmq:
     image: rabbitmq:3.10.7-management
@@ -122,26 +177,3 @@ volumes:
  #    networks:
  #      - somenetweork
 
- # postgres_slave1:
- #  image: postgres:latest
- #  container_name: pgslave1
- #  environment:
- #   - POSTGRES_DB=otusdb
- #   - POSTGRES_USER=postgres
- #   - POSTGRES_PASSWORD=pass
- #  ports:
- #   - '15432:5432'
- #  networks:
- #   - somenetweork
-
- # postgres_slave2:
- #  image: postgres:latest
- #  container_name: pgslave2
- #  environment:
- #   - POSTGRES_DB=otusdb
- #   - POSTGRES_USER=postgres
- #   - POSTGRES_PASSWORD=pass
- #  ports:
- #   - '25432:5432'
- #  networks:
- #   - somenetweork
