@@ -146,6 +146,14 @@ using (var scope = app.Services.CreateScope())
                 message text,
                 CONSTRAINT pk_dialogs PRIMARY KEY (id, to_client_id)                
             );
+
+            CREATE TABLE IF NOT EXISTS dialogs_last_read
+            (
+                to_client_id uuid NOT NULL,
+                from_client_id uuid NOT NULL,
+                last_read INT,
+                CONSTRAINT pk_dialogs_last_read PRIMARY KEY (to_client_id, from_client_id)                
+            );
         "
     );
 }

@@ -45,6 +45,6 @@ namespace DialogsApp.Data.Repos
                 to,
                 from
             });
-        }
+        }                
     }
 }

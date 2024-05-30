@@ -10,16 +10,14 @@ namespace HomeWorkOTUS.Data.Repos
     {
         private readonly IConfiguration _configuration;
         private readonly IDapperContext _db;
-        private readonly IDapperSlaveContext _slaveContext;
 
         private static readonly string Columns = "id, name, ser_name as SerName, age, is_male as IsMale, interests, city, creationdate as CreationDate";
 
         public ClientsRepo(
-            IConfiguration configuration, IDapperContext db, IDapperSlaveContext slaveContext)
+            IConfiguration configuration, IDapperContext db)
         {
             _configuration = configuration;
             _db = db;
-            _slaveContext = slaveContext;
         }
 
         public async Task<Guid> CreateAsync(RegistrationRequest request)
@@ -66,6 +64,7 @@ namespace HomeWorkOTUS.Data.Repos
 
         public async Task<ClientSearchResponse> SearchAsync(ClientSearchFilter filter)
         {
+            using var transaction = _db.Connection.BeginTransaction();
             var response = new ClientSearchResponse();
             var sqlCommand = $@"select {Columns}
                                 from clients
@@ -73,7 +72,9 @@ namespace HomeWorkOTUS.Data.Repos
                                 and name like @name
                                 order by id";
 
-            response.Items = await _slaveContext.Connection.QueryAsync<Client>(sqlCommand, new { name = filter.Name + "%", serName = filter.SerName + "%" });
+            response.Items = await _db.Connection.QueryAsync<Client>(sqlCommand, new { name = filter.Name + "%", serName = filter.SerName + "%" });
+            transaction.Commit();
+            transaction.Rollback();
             return response;
         }
 
