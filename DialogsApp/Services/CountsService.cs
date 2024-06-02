@@ -1,15 +1,14 @@
-﻿using HomeWorkOTUS.Infrastructure.Services;
-using HomeWorkOTUS.Models.Dialogs;
+﻿using DialogsApp.Infrastructure.Services;
 using RestSharp;
 
-namespace HomeWorkOTUS.Services
+namespace DialogsApp.Services
 {
-    public class DialogsService : IDialogsService
+    public class CountsService : ICountsService
     {
-        public static readonly string HttpClientName = "http_client_dialogs_app";
+        public static readonly string HttpClientName = "http_client_counts_app";
         private readonly RestClient _restClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public DialogsService(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
+        public CountsService(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
             var httpClient = httpClientFactory.CreateClient(HttpClientName);
@@ -17,22 +16,22 @@ namespace HomeWorkOTUS.Services
 
             var bearerToken = TokenFromHeader();
             if (!string.IsNullOrEmpty(bearerToken))
-                _restClient.AddDefaultHeader("Authorization", string.Format("Bearer {0}", bearerToken));            
+                _restClient.AddDefaultHeader("Authorization", string.Format("Bearer {0}", bearerToken));
         }
 
-        public async Task<IEnumerable<Dialog>> ListAsync(Guid from)
+        public async Task CreateAsync(Guid to, Guid from, int dialogId)
         {
-            var restRequest = new RestRequest($"v1/dialog/{from}/list", Method.Get);
-            var response = await _restClient.ExecuteAsync<IEnumerable<Dialog>>(restRequest);
+            var restRequest = new RestRequest($"v1/counts", Method.Post);
+            restRequest.AddJsonBody(new { to, from, dialogId });
+            var response = await _restClient.ExecuteAsync(restRequest);
             if (!response.IsSuccessful)
                 throw new Exception(response.ErrorMessage);
-            return response.Data;
         }
 
-        public async Task SendAsync(Guid toClient, DialogBase dialog)
+        public async Task UpdateAsync(Guid to, Guid from, int lastReadId)
         {
-            var restRequest = new RestRequest($"v1/dialog/{toClient}/send", Method.Post);
-            restRequest.AddJsonBody(dialog);
+            var restRequest = new RestRequest($"v1/counts", Method.Put);
+            restRequest.AddJsonBody(new { to, from, lastReadId});
             var response = await _restClient.ExecuteAsync(restRequest);
             if (!response.IsSuccessful)
                 throw new Exception(response.ErrorMessage);

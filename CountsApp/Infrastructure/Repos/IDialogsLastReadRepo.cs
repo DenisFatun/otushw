@@ -1,6 +1,6 @@
 ﻿using CommonLib.Infrastructure.Repos;
 
-namespace DialogsApp.Infrastructure.Repos
+namespace CountsApp.Infrastructure.Repos
 {
     public interface IDialogsLastReadRepo : IRepo
     {

@@ -40,7 +40,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddScoped<IDapperContext, DapperContext>();
-builder.Services.AddScoped<IDapperSlaveContext, DapperSlaveContext>();
 
 builder.Services.AddServices();
 builder.Services.AddRepositories();
@@ -151,7 +150,7 @@ using (var scope = app.Services.CreateScope())
             (
                 to_client_id uuid NOT NULL,
                 from_client_id uuid NOT NULL,
-                last_read INT,
+                last_read INT,                
                 CONSTRAINT pk_dialogs_last_read PRIMARY KEY (to_client_id, from_client_id)                
             );
         "

@@ -1,7 +1,7 @@
 using CommonLib.Data;
 using CommonLib.Extensions;
 using CommonLib.Handlers;
-using MassTransit;
+using DialogsApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,18 +16,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddServices();
 builder.Services.AddRepositories();
+
 builder.Services.AddSwaggerService(["v1", "v2"]);
 
-builder.Services.AddMassTransit(busConfigurator =>
-{
-    busConfigurator.UsingRabbitMq((context, cfg) =>
-    {
-        var uri = new Uri(builder.Configuration["RabbitMqUri"]);
-        cfg.Host(uri);
-    });
-});
+var countsUrl = new Uri(builder.Configuration["CountsUrl"]);
+builder.Services.AddHttpClient(CountsService.HttpClientName, httpClient => httpClient.BaseAddress = countsUrl);
 
 var app = builder.Build();
 

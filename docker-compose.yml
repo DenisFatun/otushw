@@ -75,7 +75,21 @@ services:
    context: .
    dockerfile: /DialogsApp/Dockerfile
   ports:
-   - '55566:8080'
+   - '55556:8080'
+  networks:
+   - somenetwork
+  depends_on:
+   - postgres_db
+   - rabbitmq
+
+ countsapp:
+  image: ${DOCKER_REGISTRY-}countsapp
+  container_name: countswebapi
+  build:
+   context: .
+   dockerfile: /CountsApp/Dockerfile
+  ports:
+   - '55557:8080'
   networks:
    - somenetwork
   depends_on:

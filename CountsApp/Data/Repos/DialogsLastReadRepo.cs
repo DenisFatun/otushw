@@ -1,8 +1,8 @@
 ﻿using CommonLib.Data;
+using CountsApp.Infrastructure.Repos;
 using Dapper;
-using DialogsApp.Infrastructure.Repos;
 
-namespace DialogsApp.Data.Repos
+namespace CountsApp.Data.Repos
 {
     public class DialogsLastReadRepo : IDialogsLastReadRepo
     {
