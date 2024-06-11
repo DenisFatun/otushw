@@ -109,7 +109,79 @@ services:
    - D:/temp/pg/pgmaster:/var/lib/postgresql/data
   networks:
    - somenetwork
+ 
+ zabbix-server:
+    image: zabbix/zabbix-server-pgsql:ubuntu-6.4-latest
+    container_name: zabbix-server
+    environment:
+      - DB_SERVER_HOST=zabbixdb
+      - DB_SERVER_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=zabbix
+    networks:
+      - somenetwork
 
+ zabbix-agent:
+    image: zabbix/zabbix-agent:latest
+    container_name: zabbix-agent
+    environment:
+      - ZBX_HOSTNAME=zabbix-agent
+      - ZBX_SERVER_HOST=zabbix-server
+    networks:
+      - somenetwork
+ 
+ zabbix-front:
+     image: zabbix/zabbix-web-nginx-pgsql:ubuntu-6.4-latest
+     container_name: zabbix-front
+     environment:
+      - ZBX_SERVER_HOST=zabbix-server
+      - DB_SERVER_HOST=zabbixdb
+      - DB_SERVER_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=zabbix
+     ports:
+      - "55559:8080"
+     networks:
+      - somenetwork
+
+ zabbix-db:
+  image: postgres:latest
+  container_name: zabbixdb
+  environment:
+   - POSTGRES_USER=postgres
+   - POSTGRES_PASSWORD=pass
+  networks:
+   - somenetwork
+
+ prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - D:/temp/prometheus:/prometheus
+    networks:
+      - somenetwork
+
+ grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+        - 3000:3000
+    restart: unless-stopped
+    environment:
+        - GF_SECURITY_ADMIN_USER=admin
+        - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+        - ./grafana:/etc/grafana/provisioning/datasources
+    networks:
+        - somenetwork
  # postgres_slave1:
  #  image: postgres:latest
  #  container_name: pgslave1

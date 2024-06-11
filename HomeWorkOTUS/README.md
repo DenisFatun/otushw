@@ -6,6 +6,10 @@ docker-compose restart
 http://localhost:55555/swagger/index.html
 http://localhost:55556/swagger/index.html
 
+apt install zabbix-agent
+nano /etc/zabbix/zabbix_agentd.conf
+Hostname=zabbix-server
+
 rm -rf pgslave1 - удалить директорию
 
 запуск цитуса
@@ -45,7 +49,7 @@ cat postgresql.conf
 docker cp pgmaster:/var/lib/postgresql/data/pg_hba.conf D:\temp\docker - копирую к себе
 host    replication     replicator 	172.21.0.0/16	md5
 	docker network ls - показать сети
-	docker network inspect otushw_somenetweork | grep Subnet - маска которая интересует в настройках
+	docker network inspect otushw_somenetwork | grep Subnet - маска которая интересует в настройках
 docker cp D:\temp\docker\pg_hba.conf pgmaster:/var/lib/postgresql/data - обратно
 
 docker exec -it pgmaster su - postgres -c psql

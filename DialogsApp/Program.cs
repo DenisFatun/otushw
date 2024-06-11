@@ -5,7 +5,6 @@ using DialogsApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddOpenTelemetry("DialogsApp");
 builder.Services.AddOpenTelemetry("DialogsApp");
 
 // Add services to the container.
@@ -28,6 +27,8 @@ var countsUrl = new Uri(builder.Configuration["CountsUrl"]);
 builder.Services.AddHttpClient(CountsService.HttpClientName, httpClient => httpClient.BaseAddress = countsUrl);
 
 var app = builder.Build();
+
+app.MapPrometheusScrapingEndpoint();
 
 app.UseMiddleware<JwtMiddleware>();
 
